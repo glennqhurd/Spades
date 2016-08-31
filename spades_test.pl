@@ -24,9 +24,9 @@ my $spades_broken = 0;
 
 while (<>) {
   next if $. == 1;
-  my $_ =~ /^\s*\d+\s+(\S+)\s+\d+\s+(\S+)\s+\d+\s+(\S+)\s+\d+\s+(\S+)\s*$/;
+  $_ =~ /^\s*\d+\s+(\S+)\s+\d+\s+(\S+)\s+\d+\s+(\S+)\s+\d+\s+(\S+)\s*$/;
   my $column_count = 1;
-  if (($_ =~ /^[0-9]+$/) and ($column_count % 2 == 0)){
+  if ($1 =~ /^[0-9]+$/|$2 =~ /^[0-9]+$/|$3 =~ /^[0-9]+$/|$4 =~ /^[0-9]+$/){
     foreach my $suit (@suits) {
       my $composite;
       foreach my $card_number (2..10){
