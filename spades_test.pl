@@ -26,7 +26,11 @@ while (<>) {
   next if $. == 1;
   $_ =~ /^\s*\d+\s+(\S+)\s+\d+\s+(\S+)\s+\d+\s+(\S+)\s+\d+\s+(\S+)\s*$/;
   my $column_count = 1;
-  if ($1 =~ /^[0-9]+$/|$2 =~ /^[0-9]+$/|$3 =~ /^[0-9]+$/|$4 =~ /^[0-9]+$/){
+  my $var1 = $1;
+  my $var2 = $2;
+  my $var3 = $3;
+  my $var4 = $4;
+  if (($var1 =~ /^\d+$/)|($var2 =~ /^\d+$/)|($var3 =~ /^\d+$/)|($var4 =~ /^\d+$/)){
     foreach my $suit (@suits) {
       my $composite;
       foreach my $card_number (2..10){
@@ -47,17 +51,17 @@ while (<>) {
     }
 
     push(@bids, $_);
-    if ($1 =~ /^[0-9]+$/){
-      $player_bids1 += $1;
+    if ($var1 =~ /^\d+$/){
+      $player_bids1 += $var1;
     }
-    if ($2 =~ /^[0-9]+$/){
-      $player_bids2 += $2;
+    if ($var2 =~ /^\d+$/){
+      $player_bids2 += $var2;
     }
-    if ($3 =~ /^[0-9]+$/){
-      $player_bids3 += $3;
+    if ($var3 =~ /^\d+$/){
+      $player_bids3 += $var3;
     }
-    if ($4 =~ /^[0-9]+$/){
-      $player_bids4 += $4;
+    if ($var4 =~ /^\d+$/){
+      $player_bids4 += $var4;
     }
   }
   elsif (($column_count % 2 == 0) and ($_ ne "--")){
