@@ -3,8 +3,10 @@ use strict;
 use warnings;
 
 our (@suits, %deck, $composite, $suit, $card_number);
+our ($spades_broken);
 
 @suits = qw(D C H S);
+$spades_broken = 0;
 
 my @names;
 my @bids;
@@ -12,7 +14,6 @@ my $player_bids1;
 my $player_bids2;
 my $player_bids3;
 my $player_bids4;
-my $spades_broken = 0;
 my $var1;
 my $var2;
 my $var3;
@@ -55,6 +56,45 @@ sub tally_bids {
   }
 }
 
+sub is_broken {
+  if ($var1 =~ /^\d+$/) {
+    $spades_broken = 0;
+  }
+  elsif ($var1 ne "--"){
+    delete $deck{$_};
+    if (($spades_broken == 0) and ($_ =~ /S/)){
+      $spades_broken = 1;
+    }
+  } 
+  if ($var2 =~ /^\d+$/) {
+    $spades_broken = 0;
+  }
+  elsif ($var2 ne "--"){
+    delete $deck{$_};
+    if (($spades_broken == 0) and ($_ =~ /S/)){
+      $spades_broken = 1;
+    }
+  }
+  if ($var3 =~ /^\d+$/) {
+    $spades_broken = 0;
+  }
+  elsif ($var3 ne "--"){
+    delete $deck{$_};
+    if (($spades_broken == 0) and ($_ =~ /S/)){
+      $spades_broken = 1;
+    }
+  }
+  if ($var1 =~ /^\d+$/) {
+    $spades_broken = 0;
+  }
+  elsif ($var4 ne "--"){
+    delete $deck{$_};
+    if (($spades_broken == 0) and ($_ =~ /S/)){
+      $spades_broken = 1;
+    }
+  }
+}
+
 @ARGV == 1 or die "Only accepts 1 file input.\n";
 
 open( my $file, $ARGV[0]);
@@ -62,29 +102,28 @@ open( my $file, $ARGV[0]);
 my $line = <$file>;
 
 my @player_names = split ' ', $line;
+my $column_count = 1;
 
 while (<>) {
   next if $. == 1;
   $_ =~ /^\s*\d+\s+(\S+)\s+\d+\s+(\S+)\s+\d+\s+(\S+)\s+\d+\s+(\S+)\s*$/;
-  my $column_count = 1;
   $var1 = $1;
   $var2 = $2;
   $var3 = $3;
   $var4 = $4;
   &create_deck;
   &tally_bids;
-
-  if (($column_count % 2 == 0) and ($_ ne "--")){
-    delete $deck{$_};
-    if (($spades_broken == 0) and ($_ =~ /S/)){
-      $spades_broken = 1;
-    }
-  }
-  $column_count += 1;
+  &is_broken;
 }
 
-print "Player 1:".$player_bids1."\n";
-print "Player 2:".$player_bids2."\n";
-print "Player 3:".$player_bids3."\n";
-print "Player 4:".$player_bids4."\n";
+print $player_names[1].":".$player_bids1."\n";
+print $player_names[2].":".$player_bids2."\n";
+print $player_names[3].":".$player_bids3."\n";
+print $player_names[4].":".$player_bids4."\n";
 
+if ($spades_broken == 0) {
+  print "Spades have not been broken.\n";
+}
+else {
+  print "Spades have been broken.\n";
+}
