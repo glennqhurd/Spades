@@ -2,14 +2,16 @@
 use strict;
 use warnings;
 
+our (@suits, %deck, $composite, $suit, $card_number);
+
+@suits = qw(D C H S);
+
 my @names;
 my @bids;
 my $player_bids1;
 my $player_bids2;
 my $player_bids3;
 my $player_bids4;
-my %deck;
-my @suits = qw(D C H S);
 my $spades_broken = 0;
 my $var1;
 my $var2;
@@ -17,10 +19,9 @@ my $var3;
 my $var4;
 
 sub create_deck {
-  if (($var1 =~ /^\d+$/)|($var2 =~ /^\d+$/)|($var3 =~ /^\d+$/)|($var4 =~ /^\d+$$
-    foreach my $suit (@suits) {
-      my $composite;
-      foreach my $card_number (2..10){
+  if (($var1 =~ /^\d+$/)|($var2 =~ /^\d+$/)|($var3 =~ /^\d+$/)|($var4 =~ /^\d+$/)) {
+    foreach $suit (@suits) {
+      foreach $card_number (2..10){
         $composite = $card_number.$suit;
         $deck{$composite} = $card_number;
       }
@@ -40,19 +41,17 @@ sub create_deck {
 }
 
 sub tally_bids {
-  if (($var1 =~ /^\d+$/)|($var2 =~ /^\d+$/)|($var3 =~ /^\d+$/)|($var4 =~ /^\d+$$){
-    if ($var1 =~ /^\d+$/){
-      $player_bids1 += $var1;
-    }
-    if ($var2 =~ /^\d+$/){
-      $player_bids2 += $var2;
-    }
-    if ($var3 =~ /^\d+$/){
-      $player_bids3 += $var3;
-    }
-    if ($var4 =~ /^\d+$/){
-      $player_bids4 += $var4;
-    }
+  if ($var1 =~ /^\d+$/) {
+    $player_bids1 += $var1;
+  }
+  if ($var2 =~ /^\d+$/) {
+    $player_bids2 += $var2;
+  }
+  if ($var3 =~ /^\d+$/) {
+    $player_bids3 += $var3;
+  }
+  if ($var4 =~ /^\d+$/) {
+    $player_bids4 += $var4;
   }
 }
 
@@ -75,7 +74,7 @@ while (<>) {
   &create_deck;
   &tally_bids;
 
-  elsif (($column_count % 2 == 0) and ($_ ne "--")){
+  if (($column_count % 2 == 0) and ($_ ne "--")){
     delete $deck{$_};
     if (($spades_broken == 0) and ($_ =~ /S/)){
       $spades_broken = 1;
